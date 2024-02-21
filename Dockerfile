@@ -8,6 +8,7 @@ COPY ./Cargo.lock ./Cargo.lock
 COPY ./src ./src
 COPY ./index.html ./index.html
 
+ENV CARGO_BUILD_JOBS=1
 RUN cargo install --locked trunk
 RUN trunk build --release
 
@@ -15,5 +16,7 @@ FROM nginx:1.25.4 as runner
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf 
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+
+EXPOSE 8000
 
 CMD ["nginx", "-g", "daemon off;"]
