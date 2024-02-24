@@ -13,9 +13,10 @@ RUN cargo install --locked trunk
 RUN trunk build --release
 
 FROM nginx:1.25.4 as runner
+WORKDIR /usr/src/app
 
-COPY ./nginx.conf /etc/nginx/nginx.conf.template
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+COPY ./nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 8000
 

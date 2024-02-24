@@ -10,3 +10,11 @@ wasm-bindgen-futures = "0.4.41"
 web-sys = { version = "0.3.68", features = ["console", "AbortController"] }
 yew = { git = "https://github.com/yewstack/yew/", features = ["csr"] }
 yew-router = { git = "https://github.com/yewstack/yew.git" }
+
+[[bin]]
+name = "web-client"
+path = "src/client.rs"
+
+[[bin]]
+name = "web-server"
+path = "src/server.rs"
