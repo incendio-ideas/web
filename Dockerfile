@@ -1,4 +1,4 @@
-FROM rust:1.76-buster as builder
+FROM ghcr.io/incendio-ideas/rust-trunk:latest as builder
 WORKDIR /usr/src/app
 
 RUN rustup target add wasm32-unknown-unknown
