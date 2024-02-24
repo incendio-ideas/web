@@ -40,8 +40,9 @@ pub fn use_query<T: 'static + serde::de::DeserializeOwned>(
 
                 let response: GraphqlResponse<T> = match response.json().await {
                     Ok(response_json) => response_json,
-                    Err(_) => {
+                    Err(err) => {
                         web_sys::console::error_1(&"Failed to parse response".into());
+                        web_sys::console::error_1(&err.to_string().into());
                         return;
                     }
                 };
