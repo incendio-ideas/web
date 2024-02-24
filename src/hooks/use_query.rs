@@ -1,5 +1,10 @@
 use yew::{hook, use_effect_with, use_state, UseStateHandle};
 
+#[derive(serde::Deserialize)]
+struct GraphqlResponse<T> {
+    data: T,
+}
+
 #[hook]
 pub fn use_query<T: 'static + serde::de::DeserializeOwned>(
     body: &str,
@@ -33,7 +38,7 @@ pub fn use_query<T: 'static + serde::de::DeserializeOwned>(
                     }
                 };
 
-                let response: T = match response.json().await {
+                let response: GraphqlResponse<T> = match response.json().await {
                     Ok(response_json) => response_json,
                     Err(_) => {
                         web_sys::console::error_1(&"Failed to parse response".into());
@@ -41,7 +46,7 @@ pub fn use_query<T: 'static + serde::de::DeserializeOwned>(
                     }
                 };
 
-                state.set(Some(response));
+                state.set(Some(response.data));
             });
 
             move || controller.abort()
