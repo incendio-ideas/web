@@ -1,16 +1,19 @@
 use yew::{hook, use_effect_with, use_state, UseStateHandle};
 
-#[derive(serde::Deserialize)]
-struct GraphqlResponse<T> {
-    data: T,
-}
-
 #[hook]
 pub fn use_query<T: 'static + serde::de::DeserializeOwned>(
     body: &str,
 ) -> UseStateHandle<Option<T>> {
     let state: UseStateHandle<Option<T>> = use_state(|| None::<T>);
-    let controller = web_sys::AbortController::new().unwrap();
+
+    let controller = match web_sys::AbortController::new() {
+        Ok(controller) => controller,
+        Err(err) => {
+            web_sys::console::error_1(&err.into());
+            return state;
+        }
+    };
+
     let signal = controller.signal();
 
     let request_builder = match gloo_net::http::Request::post("/api/v0/graphql")
@@ -38,7 +41,7 @@ pub fn use_query<T: 'static + serde::de::DeserializeOwned>(
                     }
                 };
 
-                let response: GraphqlResponse<T> = match response.json().await {
+                let response: super::GraphqlResponse<T> = match response.json().await {
                     Ok(response_json) => response_json,
                     Err(err) => {
                         web_sys::console::error_1(&"Failed to parse response".into());

@@ -7,6 +7,12 @@ edition = "2021"
 gloo-net = "0.5.0"
 serde = { version = "1.0.197", features = ["derive"] }
 wasm-bindgen-futures = "0.4.41"
-web-sys = { version = "0.3.68", features = ["console", "AbortController"] }
+web-sys = { version = "0.3.68", features = [
+  "console",
+  "AbortController",
+  "HtmlFormElement",
+  "HtmlInputElement",
+  "FormData",
+] }
 yew = { git = "https://github.com/yewstack/yew/", features = ["csr"] }
 yew-router = { git = "https://github.com/yewstack/yew.git" }

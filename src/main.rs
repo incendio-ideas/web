@@ -2,36 +2,14 @@ use yew::prelude::*;
 use yew_router::prelude::*;
 
 mod hooks;
-
-use hooks::use_query::use_query;
-
-#[derive(serde::Deserialize)]
-struct LoginResponse {
-    login: String,
-}
-
-#[function_component]
-fn Home() -> Html {
-    let state: UseStateHandle<Option<LoginResponse>> =
-        use_query::<LoginResponse>(r#"{"query":"{ login }"}"#);
-
-    let token = state
-        .as_ref()
-        .map(|response| response.login.as_str())
-        .unwrap_or("loading...");
-
-    html! {
-        <>
-            <h1>{ "Home" }</h1>
-            <p>{ token }</p>
-        </>
-    }
-}
+mod pages;
 
 #[derive(Clone, Routable, PartialEq)]
 enum Route {
     #[at("/")]
     Home,
+    #[at("/auth/signup")]
+    SignUp,
     #[at("/404")]
     #[not_found]
     NotFound,
@@ -39,7 +17,8 @@ enum Route {
 
 fn switch(routes: Route) -> Html {
     match routes {
-        Route::Home => html! { <Home /> },
+        Route::Home => html! { <pages::home::Home /> },
+        Route::SignUp => html! { <pages::signup::SignUp /> },
         Route::NotFound => html! { <h1>{ "Not Found" }</h1> },
     }
 }
